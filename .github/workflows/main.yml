@@ -7,14 +7,19 @@ on:
       - master
   pull_request:
       types: [opened, synchronize, reopened]
-- name: Setup sonarqube
-  uses: warchant/setup-sonar-scanner@v1
-  
-- name: Run sonarqube
-  env:
-    # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
-    GITHUB_TOKEN: ${{secrets.githubtoken}}
-  run: sonar-scanner
+name: Main Workflow
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup sonarqube
+      uses: warchant/setup-sonar-scanner@v1
+    - name: Run sonarqube 
+      env:
+        GITHUB_TOKEN: ${{secrets.githubtoken}}
+        
+      run: sonar-scanner
        -Dsonar.login=${{secrets.sonar_token}}
        -Dsonar.organization=jerry-zhang-dyg
        -Dsonar.host.url=https://sonarcloud.io/
